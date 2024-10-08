@@ -2,7 +2,9 @@ import { webhookCallback } from "https://deno.land/x/grammy@v1.30.0/mod.ts";
 import bot from "./bot.ts";
 import { USE_WEBHOOK } from "./Constants.ts";
 
-const shouldUseWebhook = Deno.env.get(USE_WEBHOOK)?.trim() === "true" ? true : false;
+const shouldUseWebhook = Deno.env.get(USE_WEBHOOK)?.trim() === "true"
+  ? true
+  : false;
 
 if (shouldUseWebhook === false) {
   bot.start();

@@ -1,19 +1,25 @@
-import { Bot } from "grammY/mod.ts";
+import { webhookCallback } from "https://deno.land/x/grammy@v1.30.0/mod.ts";
+import bot from "./bot.ts";
+import { USE_WEBHOOK } from "./Constants.ts";
 
-const TELEGRAM_BOT_TOKEN = "TELEGRAM_BOT_TOKEN";
+const shouldUseWebhook = Deno.env.get(USE_WEBHOOK)?.trim() === "true" ? true : false;
 
-const token = Deno.env.get(TELEGRAM_BOT_TOKEN)?.trim();
-
-if (typeof token === "undefined") {
-  const errorMsg = `Not able to obtain the Telegram Bot API Token from the environment variable ${TELEGRAM_BOT_TOKEN}`;
-  console.error(errorMsg);
-  throw new Error(errorMsg);
+if (shouldUseWebhook === false) {
+  bot.start();
 }
 
-const bot = new Bot(token);
+const handleUpdate = webhookCallback(bot, "std/http");
 
-bot.command("start", (ctx) => ctx.reply("Welcome! Up and running."));
-
-bot.on("message", (ctx) => ctx.reply("Got another message!"));
-
-bot.start();
+Deno.serve(async (req) => {
+  if (req.method === "POST") {
+    const url = new URL(req.url);
+    if (url.pathname.slice(1) === bot.token) {
+      try {
+        return await handleUpdate(req);
+      } catch (err) {
+        console.error(err);
+      }
+    }
+  }
+  return new Response();
+});

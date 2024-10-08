@@ -13,7 +13,6 @@ if (shouldUseWebhook === false) {
 const handleUpdate = webhookCallback(bot, "std/http");
 
 Deno.serve(async (req) => {
-  console.debug('Request Recieved' + req.url);
   if (req.method === "POST") {
     const url = new URL(req.url);
     if (url.pathname.slice(1) === bot.token) {

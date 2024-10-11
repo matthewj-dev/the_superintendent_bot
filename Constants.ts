@@ -1,3 +1,3 @@
-export const TELEGRAM_BOT_TOKEN = "TELEGRAM_BOT_TOKEN";
+export const TELEGRAM_BOT_TOKEN = "TELEGRAM_BOT_TOKEN"
 
-export const USE_WEBHOOK = "USE_WEBHOOK";
+export const USE_WEBHOOK = "USE_WEBHOOK"
